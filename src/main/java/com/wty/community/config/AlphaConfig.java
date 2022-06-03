@@ -5,8 +5,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.text.SimpleDateFormat;
 
-/*
-配置类
+/**
+ * @className AlphaConfig
+ * @summary 配置类示例
+ * @date 2022/06/03 15:17:51
  */
 @Configuration
 public class AlphaConfig {

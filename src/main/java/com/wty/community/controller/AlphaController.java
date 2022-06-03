@@ -1,18 +1,27 @@
 package com.wty.community.controller;
 
 import com.wty.community.service.AlphaService;
+import com.wty.community.util.CommunityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
+/**
+ * @className AlphaController
+ * @summary
+ *      Controller示例
+ * @date 2022/06/03 15:11:37
+ */
 @Controller
 @RequestMapping("/alpha")
 public class AlphaController {
@@ -92,6 +101,7 @@ public class AlphaController {
         mav.setViewName("/demo/view");
         return mav;
     }
+
     //简化
     @RequestMapping(path = "/school", method = RequestMethod.GET)
     public String getSchool(Model model) {
@@ -102,41 +112,79 @@ public class AlphaController {
 
     // 响应 JSON 数据（异步请求）
     // 衔接的作用：Java对象 --> JSON字符串 --> JS对象
-    @RequestMapping(path="/emp",method = RequestMethod.GET)
+    @RequestMapping(path = "/emp", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String,Object> getEmp() {
-        Map<String,Object> emp = new HashMap<>();
-        emp.put("name","李四");
+    public Map<String, Object> getEmp() {
+        Map<String, Object> emp = new HashMap<>();
+        emp.put("name", "李四");
         emp.put("age", 23);
-        emp.put("salary",8000.00);
+        emp.put("salary", 8000.00);
         return emp;
         // 由注解@ResponseBody和返回类型Map，会向浏览器发送JSON字符串 {"name":"李四","salary":8000.0,"age":23}
     }
 
-    @RequestMapping(path="/emps",method = RequestMethod.GET)
+    @RequestMapping(path = "/emps", method = RequestMethod.GET)
     @ResponseBody
-    public List<Map<String,Object>> getEmps() {
-        List<Map<String,Object>> list = new ArrayList<>();
-        Map<String,Object> emp = new HashMap<>();
-        emp.put("name","李四");
+    public List<Map<String, Object>> getEmps() {
+        List<Map<String, Object>> list = new ArrayList<>();
+        Map<String, Object> emp = new HashMap<>();
+        emp.put("name", "李四");
         emp.put("age", 23);
-        emp.put("salary",8000.00);
+        emp.put("salary", 8000.00);
         list.add(emp);
 
         emp = new HashMap<>();
-        emp.put("name","张三");
+        emp.put("name", "张三");
         emp.put("age", 24);
-        emp.put("salary",9500.00);
+        emp.put("salary", 9500.00);
         list.add(emp);
 
         emp = new HashMap<>();
-        emp.put("name","王五");
+        emp.put("name", "王五");
         emp.put("age", 14);
-        emp.put("salary",18000.00);
+        emp.put("salary", 18000.00);
         list.add(emp);
 
         return list;
         // 由注解@ResponseBody和返回类型Map，会向浏览器发送JSON字符串 {"name":"李四","salary":8000.0,"age":23}
     }
 
+    // cookie 示例
+    @RequestMapping(path = "/cookie/set", method = RequestMethod.GET)
+    @ResponseBody
+    public String setCookie(HttpServletResponse response) {
+        // 创建cookie
+        Cookie cookie = new Cookie("code", CommunityUtil.generateUUID());
+        // 设置生效范围
+        cookie.setPath("/community/alpha");
+        // 设置生存时间 10min（默认关闭浏览器就消失）
+        cookie.setMaxAge(60 * 10);
+        // 发送cookie
+        response.addCookie(cookie);
+
+        return "set cookie";
+    }
+
+    @RequestMapping(path = "/cookie/get", method = RequestMethod.GET)
+    @ResponseBody
+    public String getCookie(@CookieValue("code") String code) {
+        System.out.println(code);
+        return "get cookie";
+    }
+
+    // session示例
+    @RequestMapping(path = "/session/set", method = RequestMethod.GET)
+    @ResponseBody
+    public String setSession(HttpSession session) {
+        session.setAttribute("id", 1);
+        session.setAttribute("name", "SessionTest");
+        return "set session";
+    }
+
+    @RequestMapping(path = "/session/get", method = RequestMethod.GET)
+    @ResponseBody
+    public String getSession(HttpSession session) {
+        System.out.println(session.getAttribute("id") + ":" + session.getAttribute("name"));
+        return "get session";
+    }
 }

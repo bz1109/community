@@ -6,6 +6,11 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * @className DiscussPostMapper
+ * @summary 查找所有帖子
+ * @date 2022/06/03 15:03:08
+ */
 @Mapper
 public interface DiscussPostMapper {
 

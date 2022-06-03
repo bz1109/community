@@ -9,8 +9,12 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-/*
-Spring容器管理类
+
+/**
+ * @className AlphaService
+ * @summary
+ *      Spring容器管理示例
+ * @date 2022/06/03 14:55:04
  */
 @Service
 //默认为单例并且启动时初始化："singleton"，单例可能有线程安全问题

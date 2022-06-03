@@ -1,7 +1,9 @@
 package com.wty.community.entity;
 
-/*
-封装分页相关信息
+/**
+ * @className Page
+ * @summary 封装分页相关信息的类
+ * @date 2022/06/03 15:01:12
  */
 public class Page {
     // 当前页码

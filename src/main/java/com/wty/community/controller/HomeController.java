@@ -18,6 +18,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @className HomeController
+ * @summary
+ *      主页展示：
+ *
+ * @date 2022/06/03 15:15:17
+ */
 @Controller
 public class HomeController {
     @Autowired

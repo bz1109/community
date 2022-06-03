@@ -9,9 +9,9 @@ import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest
 @ContextConfiguration(classes = CommunityApplication.class)
-public class LoggerTest {
+public class LoggerTests {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoggerTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoggerTests.class);
 
     @Test
     public void testLogger() {

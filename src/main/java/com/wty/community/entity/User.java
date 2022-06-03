@@ -2,6 +2,11 @@ package com.wty.community.entity;
 
 import java.util.Date;
 
+/**
+ * @className User
+ * @summary 用户类
+ * @date 2022/06/03 15:00:58
+ */
 public class User {
     private int id;
     private String username;
