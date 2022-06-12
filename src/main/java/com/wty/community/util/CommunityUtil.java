@@ -1,15 +1,20 @@
 package com.wty.community.util;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
  * @className CommunityUtil
- * @summary
- *      常用工具包封装：
- *      随机字符串生成、MD5加密、检查密码是否符合要求
+ * @summary 常用工具包封装：
+ * 随机字符串生成
+ * MD5加密
+ * 检查密码是否符合要求
+ * JSON字符串获取
  * @date 2022/06/03 14:56:31
  */
 public class CommunityUtil {
@@ -52,5 +57,31 @@ public class CommunityUtil {
 
     }
 
+    // 转为json字符串
+    public static String getJSONString(int code, String msg, Map<String, Object> map) {
+        JSONObject json = new JSONObject();
+        json.put("code", code);
+        json.put("msg", msg);
+        if (map != null) {
+            for (String key : map.keySet()) {
+                json.put(key, map.get(key));
+            }
+        }
+        return json.toJSONString();
+    }
 
+    public static String getJSONString(int code, String msg) {
+        return getJSONString(code, msg, null);
+    }
+
+    public static String getJSONString(int code) {
+        return getJSONString(code, null, null);
+    }
+
+    public static void main(String[] args) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "zhangsan");
+        map.put("age", 23);
+        System.out.println(getJSONString(0, "ok", map));
+    }
 }
