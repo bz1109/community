@@ -2,7 +2,10 @@ package com.wty.community.controller;
 
 import com.wty.community.annotation.LoginRequired;
 import com.wty.community.entity.User;
+import com.wty.community.service.FollowService;
+import com.wty.community.service.LikeService;
 import com.wty.community.service.UserService;
+import com.wty.community.util.CommunityConstant;
 import com.wty.community.util.CommunityUtil;
 import com.wty.community.util.HostHolder;
 import org.apache.commons.lang3.StringUtils;
@@ -27,14 +30,13 @@ import java.util.Map;
 
 /**
  * @className UserController
- * @summary
- *      用户功能：
- *      上传并设置头像、修改密码
+ * @summary 用户功能：
+ * 上传并设置头像、修改密码
  * @date 2022/06/03 15:17:12
  */
 @Controller
 @RequestMapping("/user")
-public class UserController {
+public class UserController implements CommunityConstant {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -52,6 +54,12 @@ public class UserController {
 
     @Autowired
     private HostHolder hostHolder;
+
+    @Autowired
+    private LikeService likeService;
+
+    @Autowired
+    private FollowService followService;
 
     @LoginRequired
     @RequestMapping(path = "/setting", method = RequestMethod.GET)
@@ -131,7 +139,7 @@ public class UserController {
                 model.addAttribute("msg", "修改密码成功！请重新登录");
                 model.addAttribute("target", "/logout");
                 return "/site/operate-result";
-            }else {
+            } else {
                 model.addAttribute("fail1", map.get("fail1"));
                 model.addAttribute("fail2", map.get("fail2"));
                 return "/site/setting";
@@ -140,6 +148,33 @@ public class UserController {
             model.addAttribute("wrong", "两次输入的新密码不一致！");
             return "/site/setting";
         }
+    }
+
+    // 个人主页
+    @RequestMapping(path = "/profile/{userId}", method = RequestMethod.GET)
+    public String getProfilePage(@PathVariable("userId") int userId, Model model) {
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            throw new RuntimeException("该用户不存在！");
+        }
+        // 用户
+        model.addAttribute("user", user);
+        // 点赞数量
+        int likeCount = likeService.findUserLikeCount(userId);
+        model.addAttribute("likeCount", likeCount);
+        // 查询关注数量
+        long followeeCount = followService.findFolloweeCount(userId, ENTITY_TYPE_USER);
+        model.addAttribute("followeeCount", followeeCount);
+        // 查询粉丝数量
+        long followerCount = followService.findFollowerCount(ENTITY_TYPE_USER, userId);
+        model.addAttribute("followerCount", followerCount);
+        // 查询当前登录用户 是否 已关注
+        boolean hasFollowed = false;
+        if (hostHolder.getUser() != null) {
+            hasFollowed = followService.hasFollowed(hostHolder.getUser().getId(), ENTITY_TYPE_USER, userId);
+        }
+        model.addAttribute("hasFollowed", hasFollowed);
+        return "/site/profile";
     }
 
 }

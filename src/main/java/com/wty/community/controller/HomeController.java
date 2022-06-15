@@ -4,7 +4,9 @@ import com.wty.community.entity.DiscussPost;
 import com.wty.community.entity.Page;
 import com.wty.community.entity.User;
 import com.wty.community.service.DiscussPostService;
+import com.wty.community.service.LikeService;
 import com.wty.community.service.UserService;
+import com.wty.community.util.CommunityConstant;
 import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,12 +28,15 @@ import java.util.Map;
  * @date 2022/06/03 15:15:17
  */
 @Controller
-public class HomeController {
+public class HomeController implements CommunityConstant {
     @Autowired
     private DiscussPostService discussPostService;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LikeService likeService;
 
     @RequestMapping(path = "/index", method = RequestMethod.GET)
     public String getIndexPage(Model model, Page page) {
@@ -50,6 +55,10 @@ public class HomeController {
                 // 产生ThymeLeaf模板解析错误Exception evaluating SpringEL expression
                 User user = userService.findUserById(discussPost.getUserId());
                 map.put("user", user);
+
+                long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, discussPost.getId());
+                map.put("likeCount",likeCount);
+
                 discussPosts.add(map);
             }
         }

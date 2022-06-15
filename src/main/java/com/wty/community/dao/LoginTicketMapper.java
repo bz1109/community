@@ -8,9 +8,12 @@ import org.apache.ibatis.annotations.*;
  * @summary
  *      登录凭证相关DAO：
  *      插入、查找、更新状态
+ *
+ *      用了Redis，不推荐使用了 @Deprecated
  * @date 2022/06/03 15:03:47
  */
 @Mapper
+@Deprecated
 public interface LoginTicketMapper {
     @Insert({
             "insert into login_ticket (user_id, ticket, status, expired) "+
