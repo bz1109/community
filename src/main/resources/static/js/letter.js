@@ -47,6 +47,6 @@ function delete_msg() {
 	$("#hintModal").modal("show");
 	setTimeout(function(){
 		$("#hintModal").modal("hide");
-		location.href="";
+		location.reload();
 	}, 1500);
 }
