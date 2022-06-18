@@ -1,5 +1,11 @@
 package com.wty.community.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Setting;
+
 import java.util.Date;
 
 /**
@@ -7,15 +13,40 @@ import java.util.Date;
  * @summary 帖子类
  * @date 2022/06/03 15:01:52
  */
+
+// es 7.0 中，
+// type被弃用，shards, replicas需要在setting里注入
+@Setting(shards = 6,replicas = 3)
+@Document(indexName = "discusspost"/*, type = "", shards = 4, replicas = 2*/)
 public class DiscussPost {
+    @Id
     private int id;
+
+    @Field(type = FieldType.Integer)
     private int userId;
+
+    // 例如搜索：互联网校招，会将这个拆分成更多的词
+    // max比如：互联网、互联、联网、网校。。。
+    // smart ： 互联网、校招
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String title;
+
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String content;
+
+    @Field(type = FieldType.Integer)
     private int type;
+
+    @Field(type = FieldType.Integer)
     private int status;
+
+    @Field(type = FieldType.Date)
     private Date createTime;
+
+    @Field(type = FieldType.Integer)
     private int commentCount;
+
+    @Field(type = FieldType.Double)
     private double score;
 
     public int getId() {
