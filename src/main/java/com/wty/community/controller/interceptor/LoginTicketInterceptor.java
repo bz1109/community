@@ -6,6 +6,11 @@ import com.wty.community.service.UserService;
 import com.wty.community.util.CookieUtil;
 import com.wty.community.util.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,7 +35,7 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
     @Autowired
     private HostHolder hostHolder;
 
-    // 在Controller之前执行，返回false 会终止后续的请求
+    // 在Controller之前执行，返回 false 会终止后续的请求
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 从cookie获取ticket凭证
@@ -44,6 +49,10 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
                 User user = userService.findUserById(loginTicket.getUserId());
                 // 在本次请求中持有 用户（利用ThreadLocal，线程隔离）
                 hostHolder.setUser(user);
+                // 构建用户认证的结果，并存入 SecurityContext，以便于Security进行授权
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                        user,user.getPassword(),userService.getAuthorities(user.getId()));
+                SecurityContextHolder.setContext(new SecurityContextImpl(authentication));
             }
         }
         return true;
@@ -62,5 +71,7 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         hostHolder.clear();
+        // 这里不能删除SecurityContextHolder里的内容
+        // SecurityContextHolder.clearContext();
     }
 }

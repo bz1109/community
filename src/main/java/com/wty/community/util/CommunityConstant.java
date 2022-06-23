@@ -40,15 +40,25 @@ public interface CommunityConstant {
     int ENTITY_TYPE_USER=3;
 
     /*
-     * kafka主题：评论、点赞、关注、fatie
+     * kafka主题：评论、点赞、关注、删帖、分享
      */
     String TOPIC_COMMENT = "comment";
     String TOPIC_LIKE = "like";
     String TOPIC_FOLLOW = "follow";
     String TOPIC_PUBLISH = "publish";
+    String TOPIC_DELETE = "delete";
+    String TOPIC_SHARE = "share";
 
     /*
      * 系统用户ID
      */
     int SYSTEM_USER_ID = 1;
+
+    /*
+     * 权限：普通用户、管理员、版主
+     */
+    String AUTHORITY_USER = "user";
+    String AUTHORITY_ADMIN = "admin";
+    String AUTHORITY_MODERATOR = "moderator";
+
 }
