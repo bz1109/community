@@ -1,5 +1,5 @@
 # community
-社区网页项目课
+社区网页项目
 
 项目基于Spring Boot实现，重点是**Spring MVC**、**Spring MyBatis**、**Spring Security**，实现的功能和技术如下：
 
