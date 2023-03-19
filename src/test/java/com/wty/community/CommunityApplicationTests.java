@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+// 
 @SpringBootTest
 @ContextConfiguration(classes = CommunityApplication.class)
 class CommunityApplicationTests implements ApplicationContextAware {
